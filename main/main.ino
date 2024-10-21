@@ -1,14 +1,21 @@
-#include "../sensors/DHTSensor/DHTSensor.h"   
-#include "../sensors/FC28Sensor/FC28Sensor.h"   
-#include "../sensors/NPKSensor/NPKSensor.h"   
+#include "../sensors/DHTSensor/DHTSensor.ino"   
+#include "../sensors/FC28Sensor/FC28Sensor.ino"   
+#include "../sensors/NPKSensor/NPKSensor.ino"   
+#include "../actuators/WaterPump/WaterPump.ino" 
+#include "../network/WiFiManager.ino"  
+#include "../network/HttpClient.ino" 
 
 // Instancias de los sensores
 DHTSensor dhtSensor();  // Pin donde está el DHT22
 FC28Sensor fc28Sensor(32);  // Pin donde está el FC-28
 NPKSensor npkSensor();  // Pines de RE y DE para el NPK
+WaterPump waterPump(13);  // Pin donde esta el rele
+WiFiManager wifiManager("tu_SSID", "tu_contraseña");  
+HttpClient httpClient("http://localhost:5000/");
 
 void setup() {
-  Serial.begin(115200);  // Asegúrate de que la velocidad es adecuada
+  Serial.begin(115200); 
+  wifiManager.connect();  
 }
 
 void loop() {
@@ -32,8 +39,10 @@ void loop() {
   Serial.printf("Fósforo: %d\n", phosphorus);
   Serial.printf("Potasio: %d\n", potassium);
 
-  if(humidity < ){
-
+  if (humidity < 40.0) {
+    waterPump.turnOn();  
+  } else {
+    waterPump.turnOff();  
   }
   
   // Esperar un tiempo antes de la siguiente lectura
