@@ -12,11 +12,12 @@ class HttpClient {
 
     // Método para registrar datos de sensores
     void registerSensorData(String id_maceta, String data) {
-      String url = baseUrl + "/api/macetas/" + id_maceta + "/sensores/";
+      String url = baseUrl + "/api/smartpots/" + id_maceta + "/sensors/add/";
       HTTPClient http;
 
       http.begin(url);  // Inicia la conexión
       http.addHeader("Content-Type", "application/json");  // Tipo de contenido
+      http.addHeader("Authorization", "Token b73332fb3c36a251729df75b026e4bdb5f19715b");
 
       int httpResponseCode = http.POST(data);  // Realiza la solicitud POST
 
