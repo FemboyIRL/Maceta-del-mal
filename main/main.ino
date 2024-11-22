@@ -1,17 +1,18 @@
-#include "../sensors/DHTSensor/DHTSensor.ino"   
-#include "../sensors/FC28Sensor/FC28Sensor.ino"   
-#include "../sensors/NPKSensor/NPKSensor.ino"   
-#include "../actuators/WaterPump/WaterPump.ino" 
-#include "../network/WiFiManager.ino"  
-#include "../network/HttpClient.ino" 
+#include "sensors/DHT22Sensor/DHT22Sensor.ino"   
+#include "sensors/FC28Sensor/FC28Sensor.ino"   
+#include "sensors/NPKSensor/NPKSensor.ino"   
+#include "actuators/WaterPump/WaterPump.ino" 
+#include "network/WifiManager/WiFiManager.ino"  
+#include "network/HttpClient/HttpClient.ino"
+#include <ArduinoJson.h> 
 
 // Instancias de los sensores
 DHTSensor dhtSensor();  // Pin donde está el DHT22
 FC28Sensor fc28Sensor(32);  // Pin donde está el FC-28
 NPKSensor npkSensor();  // Pines de RE y DE para el NPK
 WaterPump waterPump(13);  // Pin donde esta el rele
-WiFiManager wifiManager("tu_SSID", "tu_contraseña");  
-HttpClient httpClient("http://localhost:5000/");
+WiFiManager wifiManager("la cabeZONA", "ivan12345");  
+HttpClient httpClient("http://192.168.100.35:8000");
 
 void setup() {
   Serial.begin(115200); 
@@ -19,6 +20,7 @@ void setup() {
 }
 
 void loop() {
+  /*
   // Leer datos del DHT22
   float temperature = dhtSensor.readTemperature();
   float humidity = dhtSensor.readHumidity();
@@ -44,7 +46,23 @@ void loop() {
   } else {
     waterPump.turnOff();  
   }
+  */
+
+  
+  StaticJsonDocument<200> jsonDoc;
+    jsonDoc["floor_humidity"] = 23;
+    jsonDoc["temperature"] = 23;
+    jsonDoc["light_level"] = 23;
+    jsonDoc["water_level"] = 23;
+
+     String jsonData;
+    serializeJson(jsonDoc, jsonData);
+
+    httpClient.registerSensorData("3", jsonData);
+
+
+
   
   // Esperar un tiempo antes de la siguiente lectura
-  delay(5000);  // Espera 5 segundos
+  delay(10000);  // Espera 5 segundos
 }
