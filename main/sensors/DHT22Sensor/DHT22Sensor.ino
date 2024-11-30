@@ -1,7 +1,7 @@
 #include "DHT.h"
 
 #define DHTPIN 4         // Pin digital conectado al sensor DHT
-#define DHTTYPE DHT22    // Definir el tipo de sensor DHT22
+#define DHTTYPE DHT11    // Definir el tipo de sensor DHT22
 
 class DHTSensor {
   private:
